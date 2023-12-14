@@ -9,7 +9,9 @@ from handlers import user_handlers, other_handlers
 logger = logging.getLogger(__name__)
 db = database('name_database')
 
+
 async def main():
+    db.create_table()
     logging.basicConfig(level=logging.INFO,
                         format='%(filename)s:%(lineno)d #%(levelname)-8s '
                                '[%(asctime)s] - %(name)s - %(message)s')
