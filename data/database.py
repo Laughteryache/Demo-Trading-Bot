@@ -2,7 +2,7 @@ import psycopg2
 
 conn = psycopg2.connect(user='postgre', password='1234')
 
-
+print()
 class database:
     def __init__(self, name):
         self.name = name
