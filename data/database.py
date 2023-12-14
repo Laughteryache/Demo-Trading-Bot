@@ -9,7 +9,7 @@ class Database:
     def create_table(self):
         cur = conn.cursor()
         cur.execute(f"""CREATE TABLE IF NOT EXISTS {self.name}
-        (id INT,
+        (id INT PRIMARY KEY,
         deposit INT,
         positions TEXT)
         ;""")
@@ -26,11 +26,24 @@ class Database:
         cur.close()
         print('[INFO] USER INSERT SUCCESSFULLY')
 
-    def get_user_info(self, id):
+    def get_user_deposit(self, id):
         cur = conn.cursor()
-        cur.execute(f"""SELECT deposit, positions FROM {self.name} 
-        WHERE id = {id};
-        """)
+        cur.execute(f"""SELECT deposit FROM {self.name} 
+                WHERE id = {id};
+                """)
+        deposit = str(cur.fetchall()).strip(',()[]')
         conn.commit()
         cur.close()
         print('[INFO] USER INFO DROPPED')
+        return deposit
+
+    def get_user_briefcase(self, id):
+        cur = conn.cursor()
+        cur.execute(f"""SELECT positions FROM {self.name} 
+                WHERE id = {id};
+                """)
+        briefcase = cur.fetchall()
+        conn.commit()
+        cur.close()
+        print('[INFO] USER INFO DROPPED')
+        return briefcase
