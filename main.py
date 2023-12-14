@@ -1,11 +1,13 @@
 import asyncio
 import logging
 
+from data.database import database
 from aiogram import Bot, Dispatcher
 from config.config import load_config, Config
 from handlers import user_handlers, other_handlers
 
 logger = logging.getLogger(__name__)
+db = database('name_database')
 
 async def main():
     logging.basicConfig(level=logging.INFO,
