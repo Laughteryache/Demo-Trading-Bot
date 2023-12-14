@@ -1,13 +1,13 @@
 import asyncio
 import logging
 
-from data.database import database
+from data.database import Database
 from aiogram import Bot, Dispatcher
 from config.config import load_config, Config
 from handlers import user_handlers, other_handlers
 
 logger = logging.getLogger(__name__)
-db = database('name_database')
+db = Database('test')
 
 
 async def main():
@@ -23,7 +23,7 @@ async def main():
     dp = Dispatcher()
 
     dp.include_router(user_handlers.router)
-    dp.include_router(other_handlers.router)
+    # dp.include_router(other_handlers.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

@@ -7,7 +7,7 @@ from data.database import Database
 from lexicon.handlers_lexicon import handlers_lexicon
 
 router = Router()
-database = Database()
+database = Database('test')
 
 #START_COMMAND
 @router.message(CommandStart())
