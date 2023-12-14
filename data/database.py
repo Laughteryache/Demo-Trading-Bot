@@ -1,6 +1,8 @@
 import psycopg2
 
 conn = psycopg2.connect(user='postgre', password='1234')
+conn.autocommit = True
+
 
 class database:
     def __init__(self, name):
@@ -28,3 +30,6 @@ class database:
             WHERE id = {id};
             """)
             print('[INFO] USER INFO DROPPED')
+
+
+conn.close()
