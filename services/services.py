@@ -1,6 +1,6 @@
 import requests
 
-API_URL = 'https://api.coinlayer.com/live?access_key=9ea0ffb2097dd48bb95e3515ad27036b'
+API_URL = 'https://api.coinlore.net/api/ticker/?id=90,80,48543'
 
-def get_course(name):
-    return requests.get(API_URL).json()['rates'][name]
+def get_course(number):
+    return requests.get(API_URL).json()[int(number)]['price_usd']

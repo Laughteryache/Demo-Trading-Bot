@@ -33,15 +33,14 @@ async def deposit_process(message: Message):
 @router.message(Command(commands='list'))
 async def send_list(message: Message):
     await message.answer(text=ru_lexicon['list_of_currency'],
-                         reply_keyboard=courses_keyboard)
+                         reply_markup=courses_keyboard)
 
 #CALLBACKS_LIST_OF_CURRENCY
-@router.callback_query(F.data.in_(['BTC',
-                                  'ETH',
-                                  'SOL']))
+@router.callback_query(F.data.in_(['1',
+                                  '2',
+                                  '3']))
 async def selected_currency(callback: CallbackQuery):
     course = get_course(callback)
     await callback.message.edit_text(text=f'• Курс {callback} к доллару:\n'
                                           f'{course} $')
-
 
