@@ -1,0 +1,1 @@
+keyboard_lexicon = {'menu': {'Торги': '/', 'Баланс': '/deposit', 'Активы': '/'}}
