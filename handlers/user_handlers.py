@@ -40,7 +40,7 @@ async def send_list(message: Message):
                                   '2',
                                   '3']))
 async def selected_currency(callback: CallbackQuery):
-    course = get_course(callback)
+    course = get_course(callback['data'])
     await callback.message.edit_text(text=f'• Курс {callback} к доллару:\n'
                                           f'{course} $')
 
