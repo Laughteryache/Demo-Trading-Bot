@@ -44,3 +44,4 @@ async def selected_currency(callback: CallbackQuery):
     await callback.message.edit_text(text=f'• Курс {lexicon_currency[callback.data]} к доллару:\n'
                                           f'{course} $')
 
+# ILYA
