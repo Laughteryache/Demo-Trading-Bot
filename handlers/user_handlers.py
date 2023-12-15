@@ -1,10 +1,12 @@
 import requests
 
-from aiogram import Router
+from aiogram import Router, F
 from aiogram.filters import Command, CommandStart
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
 from data.database import Database
-from lexicon.handlers_lexicon import handlers_lexicon
+from lexicon.lexicon import handlers_lexicon, ru_lexicon
+from keyboards.keyboards import menu_keyboard, courses_keyboard
+from services.services import get_course
 
 router = Router()
 API_URL = "https://api.coinlayer.com/live?621e02b1f8851c52c65f1a062a662e10"
@@ -30,3 +32,16 @@ async def deposit_process(message: Message):
 #LIST_COMMAND
 @router.message(Command(commands='list'))
 async def send_list(message: Message):
+    await message.answer(text=ru_lexicon['list_of_currency'],
+                         keyboard=courses_keyboard)
+
+#CALLBACKS_LIST_OF_CURRENCY
+@router.callback_query(F.data.in_(['BTC',
+                                  'ETH',
+                                  'SOL']))
+async def selected_currency(callback: CallbackQuery):
+    course = get_course(callback)
+    await callback.message.edit_text(text=f'• Курс {callback} к доллару:\n'
+                                          f'{course} $')
+
+
