@@ -1,6 +1,7 @@
 import sqlite3
-
+from lexicon.ru_lexicon import lexicon_positions
 conn = sqlite3.connect('test.py')
+
 
 class Database:
     def __init__(self, name):
@@ -11,8 +12,7 @@ class Database:
         cur.execute(f"""CREATE TABLE IF NOT EXISTS {self.name}
         (id INT PRIMARY KEY,
         deposit INT,
-        positions TEXT,
-        )
+        positions TEXT)
         ;""")
         conn.commit()
         cur.close()
@@ -27,24 +27,21 @@ class Database:
         cur.close()
         print('[INFO] USER INSERT SUCCESSFULLY')
 
-    def get_user_deposit(self, id):
+    def get_user_statistic(self, id):
         cur = conn.cursor()
-        cur.execute(f"""SELECT deposit FROM {self.name} 
+        cur.execute(f"""SELECT deposit, positions FROM {self.name} 
                 WHERE id = {id};
                 """)
-        deposit = str(cur.fetchall()).strip(',()[]')
+        statistic = cur.fetchall()[0]
+        if statistic[1]:
+            list_of_positions = []
+            for i in statistic[1].split():
+                pair = i.split('-')
+                list_of_positions.append(f'{pair[0]} - {pair[1]}')
+            statistic = [statistic[0], list_of_positions]
+        else:
+            statistic = [statistic[0], ['Открытых позиций нет']]
         conn.commit()
         cur.close()
         print('[INFO] USER INFO DROPPED')
-        return deposit
-
-    def get_user_briefcase(self, id):
-        cur = conn.cursor()
-        cur.execute(f"""SELECT positions FROM {self.name} 
-                WHERE id = {id};
-                """)
-        briefcase = cur.fetchall()
-        conn.commit()
-        cur.close()
-        print('[INFO] USER INFO DROPPED')
-        return briefcase
+        return statistic
