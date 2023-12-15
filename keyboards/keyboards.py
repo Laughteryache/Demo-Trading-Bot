@@ -1,5 +1,4 @@
-from aiogram.types import (KeyboardButton, Message, ReplyKeyboardMarkup,
-                           ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup)
+from aiogram.types import (KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup)
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from lexicon.lexicon import keyboard_lexicon, lexicon_currency
 
