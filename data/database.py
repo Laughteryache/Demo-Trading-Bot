@@ -1,5 +1,4 @@
 import sqlite3
-from lexicon.ru_lexicon import lexicon_positions
 conn = sqlite3.connect('test.py')
 
 
