@@ -10,3 +10,5 @@ handlers_lexicon = {'start': '• <b>Приветствую</b>\n'
 ru_lexicon = {'list_of_currency': '• Список доступных криптовалют: '}
 
 keyboard_lexicon = {'menu': {'Список криптовалют': '/list', 'Статистика': '/statistics', 'Активы': '/'}}
+
+lexicon_currency = {'0': 'BTC', '1': 'ETH', '2': 'SOL'}

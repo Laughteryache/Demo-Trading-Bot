@@ -12,15 +12,15 @@ menu_keyboard = menu_keyboard_builder.as_markup(one_time_keyboard=True, resize_k
 #FUNC_SEND_LIST_INLINE_KEYBOARD
 button_1 = InlineKeyboardButton(
     text='BTC/USDT',
-    callback_data='1'
+    callback_data='0'
 )
 button_2 = InlineKeyboardButton(
     text='ETH/USDT',
-    callback_data='2'
+    callback_data='1'
 )
 button_3 = InlineKeyboardButton(
     text='SOL/USDT',
-    callback_data='3'
+    callback_data='2'
 )
 courses_keyboard = InlineKeyboardMarkup(inline_keyboard=[[button_1],
                                                          [button_2],

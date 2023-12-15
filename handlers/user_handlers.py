@@ -4,7 +4,7 @@ from aiogram import Router, F
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message, CallbackQuery
 from data.database import Database
-from lexicon.lexicon import handlers_lexicon, ru_lexicon
+from lexicon.lexicon import handlers_lexicon, ru_lexicon, lexicon_currency
 from keyboards.keyboards import menu_keyboard, courses_keyboard
 from services.services import get_course
 
@@ -16,7 +16,7 @@ database = Database('test')
 @router.message(CommandStart())
 async def start_process(message: Message):
     database.insert_new_user(message.from_user.id)
-    await message.answer(text=handlers_lexicon['start'])
+    await message.answer(text=handlers_lexicon['start'], reply_markup=menu_keyboard)
 
 #HELP_COMMAND
 @router.message(Command(commands='help'))
@@ -36,11 +36,11 @@ async def send_list(message: Message):
                          reply_markup=courses_keyboard)
 
 #CALLBACKS_LIST_OF_CURRENCY
-@router.callback_query(F.data.in_(['1',
-                                  '2',
-                                  '3']))
+@router.callback_query(F.data.in_(['0',
+                                  '1',
+                                  '2']))
 async def selected_currency(callback: CallbackQuery):
-    course = get_course(callback['data'])
-    await callback.message.edit_text(text=f'• Курс {callback} к доллару:\n'
+    course = get_course(callback.data)
+    await callback.message.edit_text(text=f'• Курс {lexicon_currency[callback.data]} к доллару:\n'
                                           f'{course} $')
 
