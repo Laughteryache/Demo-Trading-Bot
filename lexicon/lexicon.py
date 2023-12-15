@@ -11,4 +11,15 @@ ru_lexicon = {'list_of_currency': '• Список доступных крип�
 
 keyboard_lexicon = {'menu': {'Список криптовалют': '/list', 'Статистика': '/statistics', 'Активы': '/'}}
 
-lexicon_currency = {'0': 'BTC', '1': 'ETH', '2': 'SOL'}
+lexicon_currency = {0: 'BTC',
+                    1: 'ETH',
+                    2: 'SOL',
+                    3: 'BNB',
+                    4: 'TON',
+                    5: 'XRP',
+                    6: 'DOGE',
+                    7: 'TRX',
+                    8: 'LINK',
+                    9: 'LTC',
+                    10: 'ATOM',
+                    11: 'ETC'}

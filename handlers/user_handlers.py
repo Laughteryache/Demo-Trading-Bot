@@ -5,8 +5,8 @@ from aiogram.filters import Command, CommandStart
 from aiogram.types import Message, CallbackQuery
 from data.database import Database
 from lexicon.lexicon import handlers_lexicon, ru_lexicon, lexicon_currency
-from keyboards.keyboards import menu_keyboard, courses_keyboard
-from services.services import get_course
+from keyboards.keyboards import menu_keyboard, courses_keyboard, pagination_keyboard
+from services.services import get_course, create_page
 
 router = Router()
 API_URL = "https://api.coinlayer.com/live?621e02b1f8851c52c65f1a062a662e10"
@@ -16,7 +16,7 @@ database = Database('test')
 @router.message(CommandStart())
 async def start_process(message: Message):
     database.insert_new_user(message.from_user.id)
-    await message.answer(text=handlers_lexicon['start'], reply_markup=menu_keyboard)
+    await message.answer(text=handlers_lexicon['start'])
 
 #HELP_COMMAND
 @router.message(Command(commands='help'))
@@ -32,16 +32,7 @@ async def deposit_process(message: Message):
 #LIST_COMMAND
 @router.message(Command(commands='list'))
 async def send_list(message: Message):
-    await message.answer(text=ru_lexicon['list_of_currency'],
-                         reply_markup=courses_keyboard)
+    await message.answer(text=create_page(0),
+                         reply_markup=pagination_keyboard(0))
 
-#CALLBACKS_LIST_OF_CURRENCY
-@router.callback_query(F.data.in_(['0',
-                                  '1',
-                                  '2']))
-async def selected_currency(callback: CallbackQuery):
-    course = get_course(callback.data)
-    await callback.message.edit_text(text=f'• Курс {lexicon_currency[callback.data]} к доллару:\n'
-                                          f'{course} $')
 
-# ILYA

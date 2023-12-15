@@ -1,8 +1,14 @@
 import requests
 
-API_URL = 'https://api.coinlore.net/api/ticker/?id=90,80,48543'
+from lexicon.lexicon import lexicon_currency
 
-def get_course(number):
-    return requests.get(API_URL).json()[int(number)]['price_usd']
+API_URL = 'https://api.coinlore.net/api/ticker/?id=90,80,48543,2710,54683,58,2,2713,2751,1,33830,118'
 
-print('lol')
+def get_course(number: int):
+    return requests.get(API_URL).json()[number]['price_usd']
+
+def create_page(number: int):
+    result: list = []
+    for i in range(0, 3):
+        result.append(f'{lexicon_currency[number*3+i]} - {get_course(number*3+1)}')
+    return '\n'.join(result)
