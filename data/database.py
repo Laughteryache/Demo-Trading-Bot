@@ -11,7 +11,8 @@ class Database:
         cur.execute(f"""CREATE TABLE IF NOT EXISTS {self.name}
         (id INT PRIMARY KEY,
         deposit INT,
-        positions TEXT)
+        positions TEXT,
+        )
         ;""")
         conn.commit()
         cur.close()
