@@ -5,7 +5,7 @@ from lexicon.lexicon import keyboard_lexicon, lexicon_currency
 
 #MENU_KEYBOARD
 menu_keyboard_builder = ReplyKeyboardBuilder()
-menu_buttons = [KeyboardButton(text=i) for i in keyboard_lexicon['menu'].values()]
+menu_buttons = [KeyboardButton(text=i) for i in keyboard_lexicon['menu'].items()]
 menu_keyboard_builder.add(*menu_buttons)
 menu_keyboard = menu_keyboard_builder.as_markup(one_time_keyboard=True, resize_keyboard=True)
 
