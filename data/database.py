@@ -26,21 +26,21 @@ class Database:
         cur.close()
         print('[INFO] USER INSERT SUCCESSFULLY')
 
-    def get_user_statistic(self, id):
+    def get_user_statistics(self, id):
         cur = conn.cursor()
         cur.execute(f"""SELECT deposit, positions FROM {self.name} 
                 WHERE id = {id};
                 """)
-        statistic = cur.fetchall()[0]
-        if statistic[1]:
+        statistics = cur.fetchall()[0]
+        if statistics[1]:
             list_of_positions = []
-            for i in statistic[1].split():
+            for i in statistics[1].split():
                 pair = i.split('-')
                 list_of_positions.append(f'{pair[0]} - {pair[1]}')
-            statistic = [statistic[0], list_of_positions]
+            statistics = [statistics[0], list_of_positions]
         else:
-            statistic = [statistic[0], ['Открытых позиций нет']]
+            statistics = [statistics[0], ['Открытых позиций нет']]
         conn.commit()
         cur.close()
         print('[INFO] USER INFO DROPPED')
-        return statistic
+        return statistics

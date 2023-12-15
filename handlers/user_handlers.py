@@ -26,14 +26,14 @@ async def help_process(message: Message):
 #STATISTICS_COMMAND
 @router.message(Command(commands='statistics'))
 async def deposit_process(message: Message):
-    user_deposit = database.get_user_deposit(id=message.from_user.id)
+    user_deposit = database.get_user_statistics(id=message.from_user.id)
     await message.answer(text=f'• Ваш текущий депозит {user_deposit}$')
 
 #LIST_COMMAND
 @router.message(Command(commands='list'))
 async def send_list(message: Message):
     await message.answer(text=ru_lexicon['list_of_currency'],
-                         keyboard=courses_keyboard)
+                         reply_keyboard=courses_keyboard)
 
 #CALLBACKS_LIST_OF_CURRENCY
 @router.callback_query(F.data.in_(['BTC',
