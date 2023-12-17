@@ -2,36 +2,27 @@ from aiogram.types import (KeyboardButton, InlineKeyboardButton, InlineKeyboardM
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from lexicon.lexicon import keyboard_lexicon, lexicon_currency
 
-#MENU_KEYBOARD
-menu_keyboard_builder = ReplyKeyboardBuilder()
-menu_buttons = [KeyboardButton(text=i) for i in keyboard_lexicon['menu'].keys()]
-menu_keyboard_builder.add(*menu_buttons)
-menu_keyboard = menu_keyboard_builder.as_markup(one_time_keyboard=True, resize_keyboard=True)
 
-
-def pagination_keyboard(number: int) -> InlineKeyboardMarkup:
+def create_inline_kb(width: int,
+                     *args: str,
+                     last_btn: str | None = None,
+                     **kwargs: str) -> InlineKeyboardMarkup:
     kb_builder = InlineKeyboardBuilder()
-    button_1 = InlineKeyboardButton(
-        text=f'{lexicon_currency[number*3]}',
-        callback_data=str(number*3)
-    )
-    button_2 = InlineKeyboardButton(
-        text=f'{lexicon_currency[number*3+1]}',
-        callback_data=str(number*3+1)
-    )
-    button_3 = InlineKeyboardButton(
-        text=f'{lexicon_currency[number*3+2]}',
-        callback_data=str(number*3+2)
-    )
-    forward = InlineKeyboardButton(
-        text='>>',
-        callback_data='forward'
-    )
-    backward = InlineKeyboardButton(
-        text='<<',
-        callback_data='backward'
-    )
-    buttons = [backward, button_1, button_2, button_3, forward]
-    kb_builder.row(*buttons, width=5)
-
+    buttons: list[InlineKeyboardButton] = []
+    if args:
+        for button in args:
+            buttons.append(InlineKeyboardButton(
+                text=keyboard_lexicon[button] if button in keyboard_lexicon else button,
+                callback_data=button))
+    if kwargs:
+        for button, text in kwargs.items():
+            buttons.append(InlineKeyboardButton(
+                text=text,
+                callback_data=button))
+    kb_builder.row(*buttons, width=width)
+    if last_btn:
+        kb_builder.row(InlineKeyboardButton(
+            text=last_btn,
+            callback_data='last_btn'
+        ))
     return kb_builder.as_markup()
