@@ -4,7 +4,7 @@ import logging
 from data.database import Database
 from aiogram import Bot, Dispatcher
 from config.config import load_config, Config
-from handlers import user_handlers, other_handlers
+from handlers import user_handlers, other_handlers, callback_handlers
 
 logger = logging.getLogger(__name__)
 db = Database('test')
@@ -23,6 +23,7 @@ async def main():
     dp = Dispatcher()
 
     dp.include_router(user_handlers.router)
+    dp.include_router(callback_handlers.router)
     # dp.include_router(other_handlers.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
