@@ -9,6 +9,7 @@ from services.services import create_page
 router = Router()
 database = Database('test2')
 
+
 #START_COMMAND
 @router.message(CommandStart())
 async def start_process(message: Message):

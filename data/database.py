@@ -11,8 +11,7 @@ class Database:
         cur.execute(f"""CREATE TABLE IF NOT EXISTS {self.name}
         (id INT PRIMARY KEY,
         deposit INT,
-        positions TEXT, 
-        page INT)
+        positions TEXT)
         ;""")
         conn.commit()
         cur.close()
@@ -20,7 +19,7 @@ class Database:
 
     def insert_new_user(self, id):
         cur = conn.cursor()
-        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions, page) 
+        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions) 
         VALUES ({id}, {100000}, '', 0);
         """)
         conn.commit()
@@ -45,25 +44,6 @@ class Database:
         cur.close()
         print('[INFO] USER INFO DROPPED')
         return statistics
-
-    def get_user_page(self, id):
-        cur = conn.cursor()
-        cur.execute(f"""SELECT page FROM {self.name} 
-                        WHERE id = {id};
-                        """)
-        page = cur.fetchall()[0][0]
-        conn.commit()
-        cur.close()
-        print('[INFO] USER PAGE DROPPED')
-        return page
-
-    def update_user_page(self, id, page):
-        cur = conn.cursor()
-        cur.execute(f"""UPDATE {self.name}
-                    SET page={page} WHERE id={id}""")
-        conn.commit()
-        cur.close()
-        print('[INFO] USER PAGE UPDATED')
 
     def update_user_deposit(self, id):
         pass
