@@ -11,7 +11,9 @@ class Database:
         cur.execute(f"""CREATE TABLE IF NOT EXISTS {self.name}
         (id INT PRIMARY KEY,
         deposit INT,
-        positions TEXT)
+        positions TEXT,
+        wins INT,
+        loses INT
         ;""")
         conn.commit()
         cur.close()
@@ -19,8 +21,8 @@ class Database:
 
     def insert_new_user(self, id):
         cur = conn.cursor()
-        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions)
-        VALUES ({id}, {100000}, '');
+        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions, wins, loses)
+        VALUES ({id}, {100000}, '', {0}, {0});
         """)
         conn.commit()
         cur.close()
@@ -44,6 +46,14 @@ class Database:
         cur.close()
         print('[INFO] USER INFO DROPPED')
         return statistics
+
+    def get_user_winrate(self, id):
+        cur = conn.cursor()
+        cur.execute(f"""SELECT wins, loses FROM {self.name}
+                            WHERE id = {id};
+                            """)
+        wins, loses = cur.fetchall()[0]
+        print(wins, loses)
 
     def update_user_deposit(self, id):
         pass
