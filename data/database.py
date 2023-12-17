@@ -12,23 +12,24 @@ class Database:
         (id INT PRIMARY KEY,
         deposit INT,
         positions TEXT,
+        total INT,
         wins INT,
-        loses INT
+        loses INT)
         ;""")
         conn.commit()
         cur.close()
         print('[INFO] TABLE CREATED SUCCESSFULLY')
 
-    def insert_new_user(self, id):
+    def insert_new_user(self, id: int):
         cur = conn.cursor()
-        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions, wins, loses)
-        VALUES ({id}, {100000}, '', {0}, {0});
+        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions, total, wins, loses)
+        VALUES ({id}, {100000}, '', {0}, {0}, {0});
         """)
         conn.commit()
         cur.close()
         print('[INFO] USER INSERT SUCCESSFULLY')
 
-    def get_user_statistics(self, id):
+    def get_user_statistics(self, id: int) -> list:
         cur = conn.cursor()
         cur.execute(f"""SELECT deposit, positions FROM {self.name} 
                 WHERE id = {id};
@@ -47,16 +48,39 @@ class Database:
         print('[INFO] USER INFO DROPPED')
         return statistics
 
-    def get_user_winrate(self, id):
-        cur = conn.cursor()
-        cur.execute(f"""SELECT wins, loses FROM {self.name}
-                            WHERE id = {id};
-                            """)
-        wins, loses = cur.fetchall()[0]
-        print(wins, loses)
+    # def get_user_winrate(self, id):
+    #     cur = conn.cursor()
+    #     cur.execute(f"""SELECT total, wins, loses FROM {self.name}
+    #                         WHERE id = {id};
+    #                         """)
+    #     total, wins, loses = cur.fetchall()[0]
+    #     winrate = int(total/wins)
+    #     conn.commit()
+    #     cur.close()
+    #     print('[INFO] USER STATISTICS DROPPED')
+    #     return
 
-    def update_user_deposit(self, id):
-        pass
+    def update_user_deposit(self, id: int, price_of_purchase: int):
+        cur = conn.cursor()
+        cur.execute(f"""SELECT deposit FROM {self.name}
+                WHERE id = {id};
+                """)
+        deposit = cur.fetchall()[0]
+        changed = deposit+price_of_purchase
+        cur.execute(f"""UPDATE {self.name} SET deposit={changed} WHERE id = {id}""")
+        conn.commit()
+        cur.close()
+        print('[INFO] USER DEPOSIT UPDATE')
+
+    def get_user_deposit(self, id):
+        cur = conn.cursor()
+        cur.execute(f"""SELECT deposit FROM {self.name}
+                WHERE id = {id};
+                """)
+        deposit = cur.fetchall()[0]
+        conn.commit()
+        cur.close()
+        return deposit
 
     def update_user_briefcase(self, id):
         pass
