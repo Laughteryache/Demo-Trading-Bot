@@ -7,7 +7,7 @@ from keyboards.keyboards import menu_keyboard, pagination_keyboard
 from services.services import create_page
 
 router = Router()
-database = Database('test2')
+database = Database('test')
 
 
 #START_COMMAND
@@ -18,7 +18,8 @@ async def start_process(message: Message):
         await message.answer(text=handlers_lexicon['start'],
                              reply_keyboard=menu_keyboard)
     except:
-        await message.answer()
+        await message.answer(text=handlers_lexicon['start'],
+                             reply_keyboard=menu_keyboard)
 
 #HELP_COMMAND
 @router.message(Command(commands='help'))

@@ -1,5 +1,5 @@
 import sqlite3
-conn = sqlite3.connect('test2.py')
+conn = sqlite3.connect('test.py')
 
 
 class Database:
@@ -19,8 +19,8 @@ class Database:
 
     def insert_new_user(self, id):
         cur = conn.cursor()
-        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions) 
-        VALUES ({id}, {100000}, '', 0);
+        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions)
+        VALUES ({id}, {100000}, '');
         """)
         conn.commit()
         cur.close()

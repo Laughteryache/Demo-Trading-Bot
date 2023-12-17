@@ -7,7 +7,7 @@ from config.config import load_config, Config
 from handlers import user_handlers, other_handlers
 
 logger = logging.getLogger(__name__)
-db = Database('test2')
+db = Database('test')
 
 
 async def main():
