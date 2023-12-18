@@ -1,15 +1,8 @@
 from aiogram.types import (KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup)
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from lexicon.lexicon import keyboard_lexicon, lexicon_currency
-from aiogram.filters.callback_data import CallbackData
-from dataclasses import dataclass
+from services.services import get_list
 
-@dataclass
-class CallBackFactory(CallbackData, prefix='path'):
-    menu: int
-    submenu: int
-    list_of_currency: int
-    purchase_confirmation: int
 
 def create_inline_kb(width: int,
                      *args: str,
@@ -46,3 +39,8 @@ def create_inline_kb(width: int,
             callback_data=last_btn
         ))
     return kb_builder.as_markup()
+
+lists: dict = get_list()
+stockmarket_callback_keyboard = create_inline_kb(1, last_btn='back', dct=lists)
+
+help_callback_keyboard = create_inline_kb(1, 'back')
