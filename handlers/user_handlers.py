@@ -1,13 +1,12 @@
-from aiogram import Router, F
-from aiogram.filters import Command, CommandStart
-from aiogram.types import Message, CallbackQuery
+from aiogram import Router
+from aiogram.filters import Command, CommandStart, StateFilter
+from aiogram.types import Message
 from data.database import Database
 from lexicon.lexicon import handlers_lexicon
 from keyboards.keyboards import create_inline_kb
 
 router = Router()
 database = Database('test')
-
 
 #START_COMMAND
 @router.message(CommandStart())
@@ -20,4 +19,3 @@ async def start_process(message: Message):
     except:
         await message.answer(text=handlers_lexicon['start'],
                              reply_markup=keyboard)
-

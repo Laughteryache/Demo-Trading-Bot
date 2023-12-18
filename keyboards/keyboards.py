@@ -2,9 +2,14 @@ from aiogram.types import (KeyboardButton, InlineKeyboardButton, InlineKeyboardM
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from lexicon.lexicon import keyboard_lexicon, lexicon_currency
 from aiogram.filters.callback_data import CallbackData
+from dataclasses import dataclass
 
-class CallbackFactory:
-
+@dataclass
+class CallBackFactory(CallbackData, prefix='path'):
+    menu: int
+    submenu: int
+    list_of_currency: int
+    purchase_confirmation: int
 
 def create_inline_kb(width: int,
                      *args: str,

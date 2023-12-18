@@ -1,5 +1,4 @@
 from aiogram import Router, F
-from aiogram.filters import Command, CommandStart
 from aiogram.types import Message, CallbackQuery
 from data.database import Database
 from lexicon.lexicon import handlers_lexicon, ru_lexicon, lexicon_currency
