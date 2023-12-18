@@ -11,6 +11,4 @@ def get_course():
 
 def get_list() -> dict:
     courses = get_course()
-    return {f"🔻Вы уверены, что хотите купить {lexicon_currency[i]} "
-                f"по цене {courses[i]['price_usd']}?":
-                f'{lexicon_currency[i]} - {courses[i]["price_usd"]}$' for i in range(12)}
+    return {lexicon_currency[i]: f'{lexicon_currency[i]} - {courses[i]["price_usd"]}$' for i in range(12)}
