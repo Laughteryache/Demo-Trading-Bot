@@ -82,19 +82,5 @@ class Database:
         cur.close()
         return deposit
 
-    def get_user_positions(self, id) -> dict:
-        cur = conn.cursor()
-        cur.execute(f"""SELECT positions FROM {self.name} 
-                WHERE id = {id};
-                """)
-        data: dict = {}
-        positions = cur.fetchall()[0].split()
-        for i in positions:
-            key, value = i.split('-')
-            data[key] = value
-        conn.commit()
-        cur.close()
-        return data
-
     def update_user_briefcase(self, id):
         pass
