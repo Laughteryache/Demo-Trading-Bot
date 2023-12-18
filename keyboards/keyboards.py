@@ -1,6 +1,9 @@
 from aiogram.types import (KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup)
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from lexicon.lexicon import keyboard_lexicon, lexicon_currency
+from aiogram.filters.callback_data import CallbackData
+
+class CallbackFactory:
 
 
 def create_inline_kb(width: int,

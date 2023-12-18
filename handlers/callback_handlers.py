@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message, CallbackQuery
 from data.database import Database
-from lexicon.lexicon import handlers_lexicon, ru_lexicon
+from lexicon.lexicon import handlers_lexicon, ru_lexicon, lexicon_currency
 from keyboards.keyboards import create_inline_kb
 from services.services import get_list
 
@@ -10,7 +10,7 @@ router = Router()
 database = Database('test')
 
 
-# STOCK MARKET CALLBACK
+# STOCK_MARKET_CALLBACK
 @router.callback_query(F.data == 'list')
 async def stock_market(callback: CallbackQuery):
     lists: dict = get_list()
@@ -29,3 +29,8 @@ async def statistics_answer(callback: CallbackQuery):
 async def help_function(callback: CallbackQuery):
     await callback.message.edit_text(text=ru_lexicon['help'],
                                      reply_markup=create_inline_kb(1, 'back'))
+#PURCHASE_CONFIRMATION_CALLBACK
+@router.callback_query(F.data.in_())
+async def purchase_confirmation(callback: CallbackQuery):
+    await callback.message.edit_text(text=)
+    print(callback['result']['data'])
