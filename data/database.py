@@ -12,9 +12,7 @@ class Database:
         (id INT PRIMARY KEY,
         deposit INT,
         positions TEXT,
-        total INT,
-        wins INT,
-        loses INT)
+        total INT)
         ;""")
         conn.commit()
         cur.close()
@@ -23,7 +21,7 @@ class Database:
     def insert_new_user(self, id: int):
         cur = conn.cursor()
         cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions, total, wins, loses)
-        VALUES ({id}, {100000}, '', {0}, {0}, {0});
+        VALUES ({id}, {100000}, 'BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATM-0 ETC-0}', {0});
         """)
         conn.commit()
         cur.close()
@@ -72,25 +70,16 @@ class Database:
         cur.close()
         print('[INFO] USER DEPOSIT UPDATE')
 
-    def get_user_deposit(self, id):
-        cur = conn.cursor()
-        cur.execute(f"""SELECT deposit FROM {self.name}
-                WHERE id = {id};
-                """)
-        deposit = cur.fetchall()[0]
-        conn.commit()
-        cur.close()
-        return deposit
-
     def get_user_positions(self, id) -> dict:
         cur = conn.cursor()
         cur.execute(f"""SELECT positions FROM {self.name} 
                 WHERE id = {id};
                 """)
         data: dict = {}
-        positions = cur.fetchall()[0].split()
-        for i in positions:
+        positions = cur.fetchall()[0]
+        for i in positions[0].split():
             key, value = i.split('-')
+            data.setdefault(key, 0)
             data[key] = value
         conn.commit()
         cur.close()
@@ -98,3 +87,4 @@ class Database:
 
     def update_user_briefcase(self, id):
         pass
+
