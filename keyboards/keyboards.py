@@ -56,8 +56,7 @@ class PageCallbackFactory(CallbackData, prefix='page'):
 @dataclass
 class PageWithPriceCallbackFactory(CallbackData, prefix='price'):
     price: str
-    last_page: str
     name: str
 
-    def __init__(self, last_page, name, price):
-        super().__init__(last_page=last_page,price=price, name=name)
+    def __init__(self, name, price):
+        super().__init__(price=price, name=name)

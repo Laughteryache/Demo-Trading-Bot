@@ -1,4 +1,7 @@
 import sqlite3
+
+from services.services import get_course, get_list, get_courses
+
 conn = sqlite3.connect('test.py')
 
 
@@ -12,6 +15,7 @@ class Database:
         (id INT PRIMARY KEY,
         deposit INT,
         positions TEXT,
+        prices TEXT,
         total INT)
         ;""")
         conn.commit()
@@ -20,8 +24,9 @@ class Database:
 
     def insert_new_user(self, id: int):
         cur = conn.cursor()
-        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions, total, wins, loses)
-        VALUES ({id}, {100000}, 'BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATM-0 ETC-0}', {0});
+        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions, prices, total)
+        VALUES ({id}, {150000}, 'BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATOM-0 ETC-0',
+        'BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATOM-0 ETC-0', {0});
         """)
         conn.commit()
         cur.close()
@@ -37,7 +42,7 @@ class Database:
             list_of_positions = []
             for i in statistics[1].split():
                 pair = i.split('-')
-                list_of_positions.append(f'{pair[0]} - {pair[1]}')
+                list_of_positions.append(f'{pair[0]}-{pair[1]}')
             statistics = [statistics[0], list_of_positions]
         else:
             statistics = [statistics[0], ['Открытых позиций нет']]
@@ -58,14 +63,14 @@ class Database:
     #     print('[INFO] USER STATISTICS DROPPED')
     #     return
 
-    def update_user_deposit(self, id: int, price_of_purchase: int):
+    def update_user_deposit(self, id: int, price: float, quantity: int):
         cur = conn.cursor()
         cur.execute(f"""SELECT deposit FROM {self.name}
                 WHERE id = {id};
                 """)
-        deposit = cur.fetchall()[0]
-        changed = deposit+price_of_purchase
-        cur.execute(f"""UPDATE {self.name} SET deposit={changed} WHERE id = {id}""")
+        deposit = cur.fetchone()[0]
+        changed = float(deposit)+price*abs(quantity)
+        cur.execute(f"""UPDATE {self.name} SET deposit={changed} WHERE id={id};""")
         conn.commit()
         cur.close()
         print('[INFO] USER DEPOSIT UPDATE')
@@ -79,12 +84,64 @@ class Database:
         positions = cur.fetchall()[0]
         for i in positions[0].split():
             key, value = i.split('-')
-            data.setdefault(key, 0)
             data[key] = value
         conn.commit()
         cur.close()
         return data
 
-    def update_user_briefcase(self, id):
-        pass
+    def update_user_positions(self, id, position: str, quantity: int):
+        cur = conn.cursor()
+        cur.execute(f"""SELECT positions FROM {self.name} 
+                        WHERE id={id};
+                        """)
+        positions = cur.fetchall()[0]
+        main_list: list = []
+        for i in positions[0].split():
+            key, value = i.split('-')
+            value = int(value)
+            if key == position:
+                value += quantity
+            main_list.append(f"{key}-{value}")
+        positions = ' '.join(main_list)
+        cur.execute(f"""UPDATE {self.name} SET positions='{positions}' WHERE id={id};""")
+        conn.commit()
+        cur.close()
 
+    def update_prices(self, id: int, price: float, name_of_coin: str):
+        cur = conn.cursor()
+        cur.execute(f"""SELECT prices FROM {self.name}
+                        WHERE id={id};
+                        """)
+        prices = cur.fetchall()[0]
+        main_list: list = []
+        for i in prices[0].split():
+            key, value = i.split('-')
+            value = float(value)
+            if key == name_of_coin:
+                value = price
+            main_list.append(f"{key}-{value}")
+        positions = ' '.join(main_list)
+        cur.execute(f"""UPDATE {self.name} SET prices='{positions}' WHERE id={id};""")
+        conn.commit()
+        cur.close()
+
+    def update_total(self, id: int):
+        cur = conn.cursor()
+        cur.execute(f"""SELECT total FROM {self.name}
+                        WHERE id={id};
+                        """)
+        total = cur.fetchall()[0][0]
+        total+=1
+        cur.execute(f"""UPDATE {self.name} SET total={total} WHERE id={id};""")
+        conn.commit()
+        cur.close()
+
+    def get_total(self, id: int) -> int:
+        cur = conn.cursor()
+        cur.execute(f"""SELECT total FROM {self.name}
+                        WHERE id={id};
+                        """)
+        result = cur.fetchall()[0][0]
+        conn.commit()
+        cur.close()
+        return result
