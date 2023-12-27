@@ -1,17 +1,13 @@
 import requests
 from aiogram import Bot
-from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand
 
 from keyboards.keyboards import PageWithPriceCallbackFactory
 from lexicon.lexicon import lexicon_currency, lexicon_for_page_of_coin, menu_commands
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import default_state, State, StatesGroup
+from aiogram.fsm.state import State, StatesGroup
 
 
 API_URL = 'https://api.coinlore.net/api/ticker/?id=90,80,48543,2710,54683,58,2,2713,2751,1,33830,118'
-
-storage = MemoryStorage()
 
 
 def get_course():
@@ -22,9 +18,11 @@ def get_list() -> dict:
     courses = get_course()
     return {PageWithPriceCallbackFactory(name_of_coin=lexicon_currency[i], price=f'{courses[i]["price_usd"]}').pack(): f'{lexicon_currency[i]} - {courses[i]["price_usd"]}$' for i in range(12)}
 
+
 def get_courses() -> dict:
     courses = get_course()
     return {lexicon_currency[i]: courses[i]["price_usd"] for i in range(12)}
+
 
 def create_page_of_coin(name, price) -> str:
     return lexicon_for_page_of_coin % (name, price)
@@ -33,7 +31,6 @@ def create_page_of_coin(name, price) -> str:
 def get_clear_statistics(data: list) -> str:
     result = []
     for i in data:
-        print(i.split('-'))
         if '0' != i.split('-')[1]:
             result.append(f"""•{i} шт.""")
     if result:
@@ -49,6 +46,7 @@ class FSMContextClass(StatesGroup):
     buying = State()
     selling = State()
     quantity = State()
+    clear_all = State()
 
 
 async def set_menu_commands(bot: Bot):

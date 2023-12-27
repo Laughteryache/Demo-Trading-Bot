@@ -1,7 +1,5 @@
 import sqlite3
 
-from services.services import get_course, get_list, get_courses
-
 conn = sqlite3.connect('test.py')
 
 
@@ -20,7 +18,6 @@ class Database:
         ;""")
         conn.commit()
         cur.close()
-        print('[INFO] TABLE CREATED SUCCESSFULLY')
 
     def insert_new_user(self, id: int):
         cur = conn.cursor()
@@ -30,7 +27,6 @@ class Database:
         """)
         conn.commit()
         cur.close()
-        print('[INFO] USER INSERT SUCCESSFULLY')
 
     def get_user_statistics(self, id: int) -> list:
         cur = conn.cursor()
@@ -48,20 +44,7 @@ class Database:
             statistics = [statistics[0], ['Открытых позиций нет']]
         conn.commit()
         cur.close()
-        print('[INFO] USER INFO DROPPED')
         return statistics
-
-    # def get_user_winrate(self, id):
-    #     cur = conn.cursor()
-    #     cur.execute(f"""SELECT total, wins, loses FROM {self.name}
-    #                         WHERE id = {id};
-    #                         """)
-    #     total, wins, loses = cur.fetchall()[0]
-    #     winrate = int(total/wins)
-    #     conn.commit()
-    #     cur.close()
-    #     print('[INFO] USER STATISTICS DROPPED')
-    #     return
 
     def update_user_deposit(self, id: int, price: float, quantity: int):
         cur = conn.cursor()
@@ -73,7 +56,6 @@ class Database:
         cur.execute(f"""UPDATE {self.name} SET deposit={changed} WHERE id={id};""")
         conn.commit()
         cur.close()
-        print('[INFO] USER DEPOSIT UPDATE')
 
     def get_user_positions(self, id) -> dict:
         cur = conn.cursor()
@@ -131,7 +113,7 @@ class Database:
                         WHERE id={id};
                         """)
         total = cur.fetchall()[0][0]
-        total+=1
+        total += 1
         cur.execute(f"""UPDATE {self.name} SET total={total} WHERE id={id};""")
         conn.commit()
         cur.close()
@@ -145,3 +127,14 @@ class Database:
         conn.commit()
         cur.close()
         return result
+
+    def clear_all(self, id: int):
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE {self.name} SET deposit={150000},
+                        positions='BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATOM-0 ETC-0',
+                        total={0},
+                        prices='BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATOM-0 ETC-0'
+                        WHERE id={id};
+                        """)
+        conn.commit()
+        cur.close()

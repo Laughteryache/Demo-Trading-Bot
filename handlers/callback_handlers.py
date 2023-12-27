@@ -49,7 +49,7 @@ async def briefcase_page(callback: CallbackQuery,
     data = update_previous_pages(data, data_callback)
     balance, positions = database.get_user_statistics(callback.from_user.id)
 
-    await callback.message.edit_text(text=f"{ru_lexicon['balance']%balance}\n\n"
+    await callback.message.edit_text(text=f"{ru_lexicon['balance'] % round(balance, 2)}\n\n"
                                           f"{ru_lexicon['positions']}\n"
                                           f"{get_clear_statistics(positions)}",
                                      reply_markup=create_inline_kb(1, back_button=data['previous_pages'][-1]))
@@ -180,5 +180,16 @@ async def final_sell_page(callback: CallbackQuery,
 
     await callback.message.edit_text(text=f"🔻Вы успешно совершили продажу {abs(quantity)} {name_of_coin}!\n\n"
                                           f"🔻Ваш баланс {round(deposit, 2)}$",
+                                     reply_markup=create_inline_kb(1, 'main_menu'))
+    await state.set_state(default_state)
+
+
+# CLEAR_ALL_PAGE
+@router.callback_query(F.data == 'yes', StateFilter(FSMContextClass.clear_all))
+async def clear_all_page(callback: CallbackQuery,
+                         state: FSMContext):
+    database.clear_all(callback.from_user.id)
+
+    await callback.message.edit_text(text=ru_lexicon['successful_clear'],
                                      reply_markup=create_inline_kb(1, 'main_menu'))
     await state.set_state(default_state)

@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from typing import Any
 
 from aiogram.filters.callback_data import CallbackData
-from aiogram.types import (KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup)
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
-from lexicon.lexicon import keyboard_lexicon, lexicon_currency
+from aiogram.types import (InlineKeyboardButton, InlineKeyboardMarkup)
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from lexicon.lexicon import keyboard_lexicon
 
 
 def create_inline_kb(width: int,
@@ -12,6 +12,7 @@ def create_inline_kb(width: int,
                      lst: list | None = None,
                      last_btn: str | None = None,
                      dct: dict | None = None,
+                     back_button: Any | None = None,
                      **kwargs: str) -> InlineKeyboardMarkup:
     kb_builder = InlineKeyboardBuilder()
     buttons: list[InlineKeyboardButton] = []
@@ -41,22 +42,18 @@ def create_inline_kb(width: int,
             text=keyboard_lexicon[last_btn] if last_btn in keyboard_lexicon else last_btn,
             callback_data=last_btn
         ))
+    if back_button:
+        kb_builder.row(InlineKeyboardButton(
+            text='Назад',
+            callback_data=back_button
+        ))
     return kb_builder.as_markup()
 
 
 @dataclass
-class PageCallbackFactory(CallbackData, prefix='page'):
-    last_page: str
-    current_page: str
-
-    def __init__(self, last_page, current_page):
-        super().__init__(last_page=last_page, current_page=current_page)
-
-
-@dataclass
-class PageWithPriceCallbackFactory(CallbackData, prefix='price'):
+class PageWithPriceCallbackFactory(CallbackData, prefix='price', sep='|'):
     price: str
-    name: str
+    name_of_coin: str
 
-    def __init__(self, name, price):
-        super().__init__(price=price, name=name)
+    def __init__(self, name_of_coin, price):
+        super().__init__(price=price, name_of_coin=name_of_coin)
