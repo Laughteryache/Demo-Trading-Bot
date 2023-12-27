@@ -59,4 +59,5 @@ async def set_menu_commands(bot: Bot):
 def update_previous_pages(data, callback_data):
     if callback_data in data['previous_pages']:
         del data['previous_pages'][-1]
-    return data if data else []
+        del data['previous_pages'][-1]
+    return data
