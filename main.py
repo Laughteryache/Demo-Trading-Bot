@@ -8,17 +8,17 @@ from handlers import user_handlers, callback_handlers
 from services.services import set_menu_commands
 
 logger = logging.getLogger(__name__)
-db = Database('test')
 
 
 async def main():
-    db.create_table()
     logging.basicConfig(level=logging.INFO,
                         format='%(filename)s:%(lineno)d #%(levelname)-8s '
                                '[%(asctime)s] - %(name)s - %(message)s')
     logger.info('Starting bot')
 
     config: Config = load_config()
+    db = Database(config.database.name)
+    db.create_table()
     bot = Bot(token=config.tg_bot.token,
               parse_mode='HTML')
     dp = Dispatcher()

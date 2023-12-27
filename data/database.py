@@ -1,6 +1,8 @@
 import sqlite3
+from config.config import Config, load_config
 
-conn = sqlite3.connect('test.py')
+config: Config = load_config()
+conn = sqlite3.connect(config.database.name)
 
 
 class Database:

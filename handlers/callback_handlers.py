@@ -3,14 +3,16 @@ from aiogram.filters import StateFilter
 from aiogram.fsm.state import default_state
 from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
+from config.config import Config, load_config
 from data.database import Database
 from lexicon.lexicon import ru_lexicon
 from keyboards.keyboards import create_inline_kb, PageWithPriceCallbackFactory
 from services.services import get_list, FSMContextClass, create_page_of_coin, get_clear_statistics, \
     update_previous_pages
 
+config: Config = load_config()
+database = Database(config.database.name)
 router = Router()
-database = Database('test')
 
 
 # MAIN_MENU

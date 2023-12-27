@@ -9,9 +9,11 @@ from keyboards.keyboards import create_inline_kb
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import default_state
 from services.services import FSMContextClass
+from config.config import Config, load_config
 
+config: Config = load_config()
+database = Database(config.database.name)
 router = Router()
-database = Database('test')
 
 
 # START_COMMAND
