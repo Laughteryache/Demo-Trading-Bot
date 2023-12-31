@@ -12,7 +12,7 @@ class Database:
     def create_table(self):
         cur = conn.cursor()
         cur.execute(f"""CREATE TABLE IF NOT EXISTS {self.name}
-        (id INT PRIMARY KEY,
+        (user_id INT PRIMARY KEY,
         deposit INT,
         positions TEXT,
         prices TEXT,
@@ -21,19 +21,19 @@ class Database:
         conn.commit()
         cur.close()
 
-    def insert_new_user(self, id: int):
+    def insert_new_user(self, user_id: int):
         cur = conn.cursor()
-        cur.execute(f"""INSERT INTO {self.name} (id, deposit, positions, prices, total)
-        VALUES ({id}, {150000}, 'BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATOM-0 ETC-0',
+        cur.execute(f"""INSERT INTO {self.name} (user_id, deposit, positions, prices, total)
+        VALUES ({user_id}, {150000}, 'BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATOM-0 ETC-0',
         'BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATOM-0 ETC-0', {0});
         """)
         conn.commit()
         cur.close()
 
-    def get_user_statistics(self, id: int) -> list:
+    def get_user_statistics(self, user_id: int) -> list:
         cur = conn.cursor()
         cur.execute(f"""SELECT deposit, positions FROM {self.name} 
-                WHERE id = {id};
+                WHERE user_id = {user_id};
                 """)
         statistics = cur.fetchall()[0]
         if statistics[1]:
@@ -48,21 +48,21 @@ class Database:
         cur.close()
         return statistics
 
-    def update_user_deposit(self, id: int, price: float, quantity: int):
+    def update_user_deposit(self, user_id: int, price: float, quantity: int):
         cur = conn.cursor()
         cur.execute(f"""SELECT deposit FROM {self.name}
-                WHERE id = {id};
+                WHERE user_id = {user_id};
                 """)
         deposit = cur.fetchone()[0]
         changed = float(deposit)+price*abs(quantity)
-        cur.execute(f"""UPDATE {self.name} SET deposit={changed} WHERE id={id};""")
+        cur.execute(f"""UPDATE {self.name} SET deposit={changed} WHERE user_id={user_id};""")
         conn.commit()
         cur.close()
 
-    def get_user_positions(self, id) -> dict:
+    def get_user_positions(self, user_id) -> dict:
         cur = conn.cursor()
         cur.execute(f"""SELECT positions FROM {self.name} 
-                WHERE id = {id};
+                WHERE user_id = {user_id};
                 """)
         data: dict = {}
         positions = cur.fetchall()[0]
@@ -73,10 +73,10 @@ class Database:
         cur.close()
         return data
 
-    def update_user_positions(self, id, position: str, quantity: int):
+    def update_user_positions(self, user_id, position: str, quantity: int):
         cur = conn.cursor()
         cur.execute(f"""SELECT positions FROM {self.name} 
-                        WHERE id={id};
+                        WHERE user_id={user_id};
                         """)
         positions = cur.fetchall()[0]
         main_list: list = []
@@ -87,14 +87,14 @@ class Database:
                 value += quantity
             main_list.append(f"{key}-{value}")
         positions = ' '.join(main_list)
-        cur.execute(f"""UPDATE {self.name} SET positions='{positions}' WHERE id={id};""")
+        cur.execute(f"""UPDATE {self.name} SET positions='{positions}' WHERE user_id={user_id};""")
         conn.commit()
         cur.close()
 
-    def update_prices(self, id: int, price: float, name_of_coin: str):
+    def update_prices(self, user_id: int, price: float, name_of_coin: str):
         cur = conn.cursor()
         cur.execute(f"""SELECT prices FROM {self.name}
-                        WHERE id={id};
+                        WHERE user_id={user_id};
                         """)
         prices = cur.fetchall()[0]
         main_list: list = []
@@ -105,38 +105,38 @@ class Database:
                 value = price
             main_list.append(f"{key}-{value}")
         positions = ' '.join(main_list)
-        cur.execute(f"""UPDATE {self.name} SET prices='{positions}' WHERE id={id};""")
+        cur.execute(f"""UPDATE {self.name} SET prices='{positions}' WHERE user_id={user_id};""")
         conn.commit()
         cur.close()
 
-    def update_total(self, id: int):
+    def update_total(self, user_id: int):
         cur = conn.cursor()
         cur.execute(f"""SELECT total FROM {self.name}
-                        WHERE id={id};
+                        WHERE user_id={user_id};
                         """)
         total = cur.fetchall()[0][0]
         total += 1
-        cur.execute(f"""UPDATE {self.name} SET total={total} WHERE id={id};""")
+        cur.execute(f"""UPDATE {self.name} SET total={total} WHERE user_id={user_id};""")
         conn.commit()
         cur.close()
 
-    def get_total(self, id: int) -> int:
+    def get_total(self, user_id: int) -> int:
         cur = conn.cursor()
         cur.execute(f"""SELECT total FROM {self.name}
-                        WHERE id={id};
+                        WHERE user_id={user_id};
                         """)
         result = cur.fetchall()[0][0]
         conn.commit()
         cur.close()
         return result
 
-    def clear_all(self, id: int):
+    def clear_all(self, user_id: int):
         cur = conn.cursor()
         cur.execute(f"""UPDATE {self.name} SET deposit={150000},
                         positions='BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATOM-0 ETC-0',
                         total={0},
                         prices='BTC-0 ETH-0 SOL-0 BNB-0 TON-0 XRP-0 DOGE-0 TRX-0 LINK-0 LTC-0 ATOM-0 ETC-0'
-                        WHERE id={id};
+                        WHERE user_id={user_id};
                         """)
         conn.commit()
         cur.close()
