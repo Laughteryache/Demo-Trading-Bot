@@ -156,7 +156,7 @@ async def final_buy_page(callback: CallbackQuery,
     database.update_user_deposit(callback.from_user.id, price, quantity)
     database.update_user_positions(callback.from_user.id, name_of_coin, quantity)
     database.update_total(callback.from_user.id)
-    database.update_prices(id=callback.from_user.id, price=-1 * price, name_of_coin=name_of_coin)
+    database.update_prices(user_id=callback.from_user.id, price=-1 * price, name_of_coin=name_of_coin)
 
     deposit = database.get_user_statistics(callback.from_user.id)[0]
 
